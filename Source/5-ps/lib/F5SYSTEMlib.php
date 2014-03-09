@@ -18,11 +18,12 @@ function runPlugins ($itx) {
 		$plugintypex = 0; // a temporary loop counter
 		while (isset($itx['plugin']['types'][$plugintypex]) {
 			$itx['plugin']['load'][$plugintypex] = new DBclass();
-			$itx['plugin']['load'][$plugintypex]->simpleQuery("SELECT * FROM `".dbprfx."plugins` WHERE `runKey` LIKE ';;".$itx['get']['com'].";".$itx['get']['action'].";;' ORDER BY `listOrder` ASC");
+			$itx['plugin']['load'][$plugintypex]->simpleQuery("SELECT * FROM `".dbprfx."plugins` WHERE `runKey` LIKE ';;".$itx['get']['com'].";".$itx['get']['action'].";;' AND `type` = '".$itx['plugin']['types'][$plugintypex]."' ORDER BY `listOrder` ASC");
 			$itx['plugin']['counter'][$plugintypex]['count'] = $itx['plugin']['load'][$plugintypex]->rows();
 			$itx['plugin']['counter'][$plugintypex]['current'] = 0;
 			while ($itx['plugin']['counter'][$plugintypex]['current'] < $itx['plugin']['counter'][$plugintypex]['count']) {
-				include(pathPrivate."plugins/plg-".$itx['plugin']['load'][$plugintypex]->result()."/".$itx['plugin']['types'][$plugintypex]['file'].".php"));
+				$itx['temp']['pluginloader']['result'] = $itx['plugin']['load'][$plugintypex]->result();
+				include(pathPrivate."plugins/plg-".$itx['temp']['pluginloader']['result']['folder']."/".$itx['plugin']['types'][$plugintypex]['file'].".php"));
 			}
 		}
 	}
@@ -37,7 +38,7 @@ function runPlugins ($itx) {
 		$plugintypex = 0; // a temporary loop counter
 		while (isset($itx['plugin']['types'][$plugintypex]) {
 			$itx['plugin']['load'][$plugintypex] = new DBclass();
-			$itx['plugin']['load'][$plugintypex]->simpleQuery("SELECT * FROM `".dbprfx."plugins` WHERE `runKey` LIKE ';;default;all;;' ORDER BY `listOrder` ASC");
+			$itx['plugin']['load'][$plugintypex]->simpleQuery("SELECT * FROM `".dbprfx."plugins` WHERE `runKey` LIKE ';;default;all;;' AND `type` = '".$itx['plugin']['types'][$plugintypex]."' ORDER BY `listOrder` ASC");
 			$itx['plugin']['counter'][$plugintypex]['count'] = $itx['plugin']['load'][$plugintypex]->rows();
 			$itx['plugin']['counter'][$plugintypex]['current'] = 0;
 			while ($itx['plugin']['counter'][$plugintypex]['current'] < $itx['plugin']['counter'][$plugintypex]['count']) {
